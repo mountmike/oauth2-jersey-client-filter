@@ -1,4 +1,7 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
 
 java {
     disableAutoTargetJvm()
@@ -34,6 +37,24 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/AllTheDucks/oauth2-jersey-client-filter")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
+            }
+        }
+    }
 }
 
 allprojects {
