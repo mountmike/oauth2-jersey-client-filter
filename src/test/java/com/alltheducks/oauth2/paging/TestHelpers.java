@@ -1,4 +1,4 @@
-package com.alltheducks.bbrest.paging;
+package com.alltheducks.oauth2.paging;
 
 import java.util.Collections;
 import java.util.List;

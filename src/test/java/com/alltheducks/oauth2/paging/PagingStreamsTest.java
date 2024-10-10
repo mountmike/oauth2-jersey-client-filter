@@ -1,11 +1,11 @@
-package com.alltheducks.bbrest.paging;
+package com.alltheducks.oauth2.paging;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.alltheducks.bbrest.paging.TestHelpers.*;
+import static com.alltheducks.oauth2.paging.TestHelpers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PagingStreamsTest {

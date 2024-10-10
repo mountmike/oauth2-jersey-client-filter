@@ -1,4 +1,4 @@
-package com.alltheducks.bbrest.paging;
+package com.alltheducks.oauth2.paging;
 
 /**
  * Describes the procedure for fetching a page of results from the REST API.

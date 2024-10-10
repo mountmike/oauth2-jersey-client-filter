@@ -1,7 +1,7 @@
-package com.alltheducks.bbrest;
+package com.alltheducks.oauth2;
 
-import com.alltheducks.bbrest.jersey.OAuth2ClientCredentialsFeature;
-import com.alltheducks.bbrest.paging.PagingStreams;
+import com.alltheducks.oauth2.jersey.OAuth2ClientCredentialsFeature;
+import com.alltheducks.oauth2.paging.PagingStreams;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
@@ -16,6 +16,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +37,7 @@ public class RestClient {
         String baseUrl = args[0];
         String oauthKey = args[1];
         String oauthSecret = args[2];
+        List<String> scopes = Arrays.asList("scope1", "anotherScope");
 
         Client tokenClient = builder
                 .register(JacksonFeature.class)
@@ -47,7 +49,8 @@ public class RestClient {
                 .register(new OAuth2ClientCredentialsFeature(
                         oauthKey,
                         oauthSecret,
-                        new URI(baseUrl + "/learn/api/public/v1/oauth2/token")
+                        new URI(baseUrl + "/learn/api/public/v1/oauth2/token"),
+                        scopes
                 ))
                 .build();
 

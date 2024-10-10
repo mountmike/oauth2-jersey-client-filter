@@ -1,4 +1,4 @@
-package com.alltheducks.bbrest.paging;
+package com.alltheducks.oauth2.paging;
 
 import org.glassfish.jersey.internal.guava.Lists;
 import org.junit.jupiter.api.Test;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.alltheducks.bbrest.paging.TestHelpers.*;
+import static com.alltheducks.oauth2.paging.TestHelpers.*;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 

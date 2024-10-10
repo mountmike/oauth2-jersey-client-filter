@@ -1,13 +1,11 @@
-package com.alltheducks.bbrest.jersey;
+package com.alltheducks.oauth2.jersey;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientRequestContext;
 import jakarta.ws.rs.client.ClientResponseContext;
 import jakarta.ws.rs.client.ClientResponseFilter;
-import jakarta.ws.rs.core.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -17,10 +15,10 @@ public class OAuth2ClientResponseFilter implements ClientResponseFilter {
 
     private static final String TOKEN_RETRY_REQUEST_PROPERTY_KEY = "tokenretryrequest";
 
-    private final TokenContext tokenContext;
+    private final UserContext userContext;
 
-    public OAuth2ClientResponseFilter(final TokenContext tokenContext) {
-        this.tokenContext = tokenContext;
+    public OAuth2ClientResponseFilter(final UserContext userContext) {
+        this.userContext = userContext;
     }
 
     @Override
@@ -29,20 +27,20 @@ public class OAuth2ClientResponseFilter implements ClientResponseFilter {
         final boolean isRetryRequest = retryRequestProperty != null && retryRequestProperty;
 
         if (responseContext.getStatus() == 401 && !isRetryRequest) {
-            logger.debug("Set token to null, and re-request...");
-            this.tokenContext.clearToken();
-            this.tokenContext.fetchAccessToken(requestContext);
+            logger.debug("401 Unauthorized received, attempting to fetch new token and retrying request");
+            this.userContext.fetchUser(requestContext);
 
-            final Client c = requestContext.getClient();
+            final var client = requestContext.getClient();
 
-            final Response r = c.target(requestContext.getUri())
+            try (final var response = client.target(requestContext.getUri())
                     .request(responseContext.getMediaType())
                     .property(TOKEN_RETRY_REQUEST_PROPERTY_KEY, true)
-                    .build(requestContext.getMethod()).invoke();
+                    .build(requestContext.getMethod())
+                    .invoke()) {
 
-            final InputStream entityStream = r.readEntity(InputStream.class);
-
-            responseContext.setEntityStream(entityStream);
+                final var entityStream = response.readEntity(InputStream.class);
+                responseContext.setEntityStream(entityStream);
+            }
         }
     }
 }

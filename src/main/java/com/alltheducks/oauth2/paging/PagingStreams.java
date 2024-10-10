@@ -1,4 +1,4 @@
-package com.alltheducks.bbrest.paging;
+package com.alltheducks.oauth2.paging;
 
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
